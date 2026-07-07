@@ -1,0 +1,46 @@
+{
+  // ===========================================================
+  // kiyoh-custom-ide — VS Code Workspace Settings
+  // These settings help local VS Code connect to the remote
+  // code-server instance on Fly.io
+  // ===========================================================
+
+  // ── Remote Development ──────────────────────────────────
+  // Configure Remote-SSH to connect to your Fly.io instance
+  // See README.md for setup instructions
+  "remote.SSH.showLoginTerminal": true,
+  "remote.SSH.remotePlatform": {
+    "kiyoh-custom-ide": "linux"
+  },
+
+  // ── Editor Settings ─────────────────────────────────────
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.renderWhitespace": "boundary",
+  "editor.minimap.enabled": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+
+  // ── Files ───────────────────────────────────────────────
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pyc": true,
+    "**/node_modules": true,
+    "**/.git": true
+  },
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+
+  // ── Terminal ────────────────────────────────────────────
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.fontSize": 13,
+
+  // ── Extensions ──────────────────────────────────────────
+  "extensions.autoUpdate": true,
+  "extensions.autoCheckUpdates": true,
+
+  // ── Git ─────────────────────────────────────────────────
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autofetch": true
+}

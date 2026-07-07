@@ -1,12 +1,17 @@
 # ===========================================================
-# code-server on Fly.io — Multi-stage Dockerfile
-# Acts as a self-hosted, cost-effective Codespaces alternative
+# kiyoh-custom-ide — Self-hosted Codespaces Alternative
+# Multi-stage Dockerfile for code-server on Fly.io
+# Optimized for VS Code Remote development (SSH + Tunnels)
 # ===========================================================
 
 # ── Stage 1: Builder ──────────────────────────────────────
 FROM debian:bookworm-slim AS builder
 
 ENV DEBIAN_FRONTEND=noninteractive
+
+LABEL maintainer="kiyoh-custom-ide"
+LABEL description="Self-hosted Codespaces alternative running VS Code (code-server) on Fly.io"
+LABEL version="1.0.0"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
@@ -28,9 +33,15 @@ FROM debian:bookworm-slim
 ENV DEBIAN_FRONTEND=noninteractive \
     SHELL=/bin/bash \
     # code-server listens on this port inside the container
-    CODE_SERVER_PORT=8080
+    CODE_SERVER_PORT=8080 \
+    # SSH port for VS Code Remote-SSH
+    SSH_PORT=2222
 
-# Install essential development tools
+LABEL maintainer="kiyoh-custom-ide"
+LABEL description="Self-hosted Codespaces alternative running VS Code (code-server) on Fly.io"
+LABEL version="1.0.0"
+
+# Install essential development tools + SSH server for VS Code Remote-SSH
 RUN apt-get update && apt-get install -y --no-install-recommends \
     # Core tooling
     ca-certificates \
@@ -38,6 +49,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     git \
     openssh-client \
+    openssh-server \
     # Build essentials (C/C++, make, etc.)
     build-essential \
     pkg-config \
@@ -59,6 +71,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tree \
     nano \
     vim \
+    # Docker CLI (for Docker-in-Docker workflows)
+    docker.io \
     # Clean up
     && rm -rf /var/lib/apt/lists/* \
     && npm install -g yarn
@@ -73,12 +87,31 @@ RUN groupadd --gid 1000 coder \
     && usermod -aG sudo coder \
     && echo "coder ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/coder
 
+# ── SSH Server Configuration (for VS Code Remote-SSH) ────
+RUN mkdir /var/run/sshd \
+    && echo "PasswordAuthentication yes" >> /etc/ssh/sshd_config \
+    && echo "PubkeyAuthentication yes" >> /etc/ssh/sshd_config \
+    && echo "Port ${SSH_PORT}" >> /etc/ssh/sshd_config \
+    && echo "PermitRootLogin no" >> /etc/ssh/sshd_config \
+    && echo "AllowUsers coder" >> /etc/ssh/sshd_config \
+    && echo "X11Forwarding no" >> /etc/ssh/sshd_config \
+    && echo "MaxAuthTries 3" >> /etc/ssh/sshd_config \
+    && echo "ClientAliveInterval 60" >> /etc/ssh/sshd_config \
+    && echo "ClientAliveCountMax 3" >> /etc/ssh/sshd_config
+
 # Ensure workspace directory exists (Fly volume will mount here)
-RUN mkdir -p /home/coder/workspace /home/coder/.config/code-server \
+RUN mkdir -p /home/coder/workspace /home/coder/.config/code-server /home/coder/.ssh \
     && chown -R coder:coder /home/coder
+
+# Set up SSH authorized_keys directory for the coder user
+RUN mkdir -p /home/coder/.ssh \
+    && chmod 700 /home/coder/.ssh \
+    && chown coder:coder /home/coder/.ssh
 
 # Set the web-server port for code-server
 EXPOSE 8080
+# Expose SSH port for VS Code Remote-SSH
+EXPOSE 2222
 
 # Switch to non-root user
 USER coder
@@ -97,5 +130,7 @@ RUN mkdir -p /home/coder/.config/code-server \
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:8080/healthz || exit 1
 
-# Start code-server
-CMD ["code-server", "--config", "/home/coder/.config/code-server/config.yaml"]
+# Start SSH server and code-server
+# The SSH server enables VS Code Remote-SSH connections
+# code-server provides the browser-based VS Code IDE
+CMD sudo service ssh start && code-server --config /home/coder/.config/code-server/config.yaml

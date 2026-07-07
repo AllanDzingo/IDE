@@ -1,9 +1,10 @@
 # ===========================================================
-# fly.toml — code-server on Fly.io
+# fly.toml — kiyoh-custom-ide on Fly.io
+# Self-hosted Codespaces alternative running VS Code (code-server)
 # Scale-to-zero configuration using Fly Machines
 # ===========================================================
 
-app = "codespace"  # Change this to your desired app name
+app = "kiyoh-custom-ide"
 
 # Primary region (change to your closest region)
 primary_region = "ams"  # Amsterdam — good for EU/Africa latency

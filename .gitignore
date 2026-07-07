@@ -3,7 +3,10 @@
 # ===========================================================
 
 # ── IDE / Editor ──────────────────────────────────────────
-.vscode/
+# Track workspace settings and extensions, ignore local user data
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 .idea/
 *.swp
 *.swo

@@ -1,0 +1,44 @@
+{
+  // ===========================================================
+  // kiyoh-custom-ide — Recommended VS Code Extensions
+  // These extensions are recommended for the best development
+  // experience when using this self-hosted codespace
+  // ===========================================================
+
+  "recommendations": [
+    // ── Remote Development ────────────────────────────────
+    "ms-vscode-remote.remote-ssh",           // Connect to Fly.io via SSH
+    "ms-vscode-remote.remote-containers",    // Dev Container support
+    "ms-vscode-remote.vscode-remote-extensionpack", // Remote Development pack
+
+    // ── Languages & Runtimes ─────────────────────────────
+    "dbaeumer.vscode-eslint",                // JavaScript/TypeScript linting
+    "esbenp.prettier-vscode",               // Code formatter
+    "ms-python.python",                     // Python support
+    "ms-python.vscode-pylance",             // Python language server
+    "ms-vscode.vscode-typescript-next",     // TypeScript nightly
+    "svelte.svelte-vscode",                 // Svelte support (if needed)
+    "bradlc.vscode-tailwindcss",            // Tailwind CSS support
+
+    // ── DevOps & Cloud ───────────────────────────────────
+    "hashicorp.terraform",                  // Terraform/HCL support
+    "ms-azuretools.vscode-docker",          // Docker support
+    "github.vscode-github-actions",         // GitHub Actions
+    "bierner.github-markdown-preview",      // Markdown preview
+
+    // ── Utilities ────────────────────────────────────────
+    "eamodio.gitlens",                      // Git supercharged
+    "mhutchie.git-graph",                  // Git graph visualization
+    "yzhang.markdown-all-in-one",          // Markdown helper
+    "tamasfe.even-better-toml",            // TOML support (fly.toml)
+    "redhat.vscode-yaml",                  // YAML support
+    "christian-kohler.path-intellisense",  // Path autocomplete
+    "streetsidesoftware.code-spell-checker", // Spell checker
+    "gruntfuggly.todo-tree"                // TODO/FIXME tracking
+  ],
+
+  // Extensions that should NOT be recommended for this workspace
+  "unwantedRecommendations": [
+    "ms-vscode.theme-monokai-dark-vscode"  // Default theme, let users choose
+  ]
+}

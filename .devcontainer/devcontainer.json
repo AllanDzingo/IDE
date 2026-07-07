@@ -1,0 +1,84 @@
+{
+  // ===========================================================
+  // kiyoh-custom-ide — Dev Container Configuration
+  // This allows local VS Code to open this repository in a
+  // container matching the Fly.io deployment environment.
+  // Requires: Docker and the "Remote - Containers" extension.
+  // ===========================================================
+
+  "name": "kiyoh-custom-ide",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+
+  // Use the Dockerfile in the repo root when building locally
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "args": {
+      "CODE_SERVER_VERSION": "4.97.3"
+    }
+  },
+
+  // Features to add to the dev container
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {},
+    "ghcr.io/devcontainers/features/python:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/sshd:1": {}
+  },
+
+  // VS Code settings for the dev container
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "/bin/bash"
+          }
+        },
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "files.autoSave": "afterDelay"
+      },
+      // Extensions to install in the dev container
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "hashicorp.terraform",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml",
+        "streetsidesoftware.code-spell-checker",
+        "gruntfuggly.todo-tree"
+      ]
+    }
+  },
+
+  // Forward ports from the container to localhost
+  "forwardPorts": [8080, 2222],
+
+  // Mount the workspace folder
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/home/coder/workspace,type=bind"
+  ],
+
+  // Post-create commands to run after container creation
+  "postCreateCommand": "sudo chown -R coder:coder /home/coder/workspace",
+
+  // The remoteUser should match the coder user in Dockerfile
+  "remoteUser": "coder",
+
+  // Container environment variables
+  "containerEnv": {
+    "SHELL": "/bin/bash"
+  },
+
+  // Security options
+  "securityOpt": ["seccomp=unconfined"],
+
+  // Run arguments (cap-add for Docker-in-Docker)
+  "runArgs": ["--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined"]
+}
