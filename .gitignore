@@ -1,0 +1,74 @@
+# ===========================================================
+# .gitignore — code-server on Fly.io
+# ===========================================================
+
+# ── IDE / Editor ──────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── Secrets & Environment ─────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+**/secrets/**
+fly.toml.bak
+
+# ── Node / NPM ────────────────────────────────────────────
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.yarn/
+
+# ── Python ────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ── Build artifacts ───────────────────────────────────────
+dist/
+build/
+*.tsbuildinfo
+*.wasm
+
+# ── Logs & Temp ───────────────────────────────────────────
+*.log
+tmp/
+temp/
+*.tmp
+
+# ── Docker ────────────────────────────────────────────────
+.dockerignore
+docker-compose.override.yml
+
+# ── Fly.io ────────────────────────────────────────────────
+.fly/
+fly-secrets.env
+
+# ── Runtime / OS ──────────────────────────────────────────
+*.pid
+*.seed
+*.pid.lock
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── Workspace-specific (will live on Fly volume, not in repo) ──
+# Keep these commented unless you decide to track local workspace
+# workspace/
